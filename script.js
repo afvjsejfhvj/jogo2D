@@ -5,22 +5,18 @@ const ctx = canvas.getContext('2d')
 
 const gravidade = 1 
 
-
-
 document.addEventListener('keypress', (e) => {
     if(e.code == 'KeyW' && personagem.pulando == false){
-        personagem.velocidadey = 20
+        personagem.velocidadey = 25
         personagem.pulando = true
     }}
 )
 
-document.addEventListener('click', (E)=> {
+document.addEventListener('click', (e)=> {
  if(gameover == true){
     location.reload()
  }
 })
-
-
 
 const personagem = {
     x: 50,
@@ -96,11 +92,8 @@ function verificaColisao(){
 
 }
 
+function loop() {//criar função loop 60 hz
 
-
-
-//criar função loop 60 hz
-function loop() {
     if(gameover = true){
     //apaga o de antes
     ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -117,7 +110,5 @@ function loop() {
     }
 
 }
-
-
 
 loop()
