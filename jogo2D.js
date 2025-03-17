@@ -11,7 +11,6 @@ document.addEventListener('keypress', (e) => {
     }
 })
 
-
 document.addEventListener('click', (e) => {
     if (gameover == true) {
         location.reload()
@@ -25,11 +24,12 @@ class Entidade{
         this.y = y 
         this.largura = largura 
         this.altura = altura 
-        this.#gravidade = 0.5
+        this.#gravidade = 0.4
     }
     get gravidade (){
         return this.#gravidade
     }
+    
 
 
     desenhar = function (ctx, cor){
@@ -72,26 +72,73 @@ class Personagem extends Entidade{
     }
         
 }
-const personagem = new Personagem(50,canvas.height - 50,50,50)
 
 class Obstaculo extends Entidade{
-    constructor(x,y,largura,altura){
-        super(x,y,altura,largura)
+    
+
+    constructor(x,y,largura,altura, velocidadex = 5){
+        super(x,y,largura,altura )
+        this.velocidadex = velocidadex
+        
     }
-   
+
+    atualizaObstaculo(){
+        this.x -= this.velocidadex
+        if(this.x <= 0 - this.largura){
+            this.x = canvas.width
+            this.velocidadex += 0.5 
+            let nova_altura = (Math.random() * 50) + 100
+            this.altura = nova_altura
+            this.y = canvas.height - nova_altura 
+        }
+    }
 }
 
+ function HouveColisao(){
+        this.velocidadey = 0 
+        this.velocidadex = 0 
+        ctx.fillStyle = 'red'
+        ctx.fillRect((canvas.width/2)-200,(canvas.height/2)-50, 400,100)
+        ctx.fillStyle='black'
+        ctx.font = '50px Arial'
+        ctx.fillText("GAME OVER", (canvas.width/20) + 250, (canvas.height/20) + 200, 200, 600)
+        gameover = true 
+} 
+             
+function verificaColisao() {
+            if (personagem.x < obstaculo.x + obstaculo.largura && 
+                personagem.x + personagem.largura > obstaculo.x &&  
+                personagem.y < obstaculo.y + obstaculo.altura && 
+                personagem.y + personagem.altura > obstaculo.y
+            ) {
+                HouveColisao()
+                
+            }
+}
+    const personagem = new Personagem(50,canvas.height - 50, 50,50)
+    this.obstaculo = new Obstaculo(canvas.width - 50, canvas.height - 100, 50, 100 )
 
+let pontos = 0;
+let elemento = document.getElementById("pontos")
+function atualizarPontos(){
+    setInterval(() => {
+       pontos ++;
+       elemento.innerHTML = pontos.toString(); 
+    }, 2000);
 
-
+}
 
 function loop() {
     if (gameover == false) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        personagem.desenhar(ctx,'black')
-        requestAnimationFrame(loop)
+        personagem.desenhar(ctx,'orange')
+        this.obstaculo.desenhar(ctx,'green')
         personagem.atualizarPersonagem()
-        obstaculo.atualizarObstaculo()
+        this.obstaculo.atualizaObstaculo()
+        verificaColisao()
+        atualizarPontos()
+        requestAnimationFrame(loop)
+        
     }
 }
 loop()

@@ -1,5 +1,5 @@
 //pegar elemento canvas pelo id
-const canvas = document.getElementById('jogo2D')
+const canvas = document.getElementById('jogo2d')
 // inicializar o canvas
 const ctx = canvas.getContext('2d')
 
